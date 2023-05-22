@@ -4,35 +4,32 @@ const cors = require('cors')
 const port = 3001;
 
 const app = express();
-
-app.use(cors());
 app.use(cookieParser());
-app.use(express.json());
+app.use(cors());
 
 //Post request that sets a session cookie based off of user's name as an object
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
     var cookie = {
-        maxAge: 24,
         httpOnly: true,
         sameSite: 'strict'
     };
-
-    res.cookie('name', req.body.name, cookie);
-    res.status(200).send();
+    //let name = req.body
+    let name = "UsersName";
+    res.cookie('name', name, cookie);
+    res.status(200).send("Cookie has been added successfully");
 });
 
 //Displays user's name from cookie when routed to /hello
 app.get('/hello', (req, res) => {
     //Displays user's name from cookies
-    console.log(req.cookies.name);
-    /*
     if (req.cookies.name !== undefined) {
         res.status(200).send(`Hello ${req.cookies.name}`);
+    } else if (req.cookies.name === undefined) {
+        res.status(200).send("No username found");
     } else {
-        res.status(200).send();
+        res.status(err).send(`There was an error: ${err}`);
     }
-    */
-   res.status(200)
+
 });
 
 app.listen(port, () => console.log(`Server is running on ${port}`));
